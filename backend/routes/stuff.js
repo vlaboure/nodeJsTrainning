@@ -1,15 +1,20 @@
 const express = require('express');
 const router = express.Router();
-const stuffCtrl = require('../controller/stuff')
+const auth = require('../midleware/auth');
+const stuffCtrl = require('../controller/stuff');
+const multer = require('../midleware/multer-config');
 
-router.post("/",stuffCtrl.createThing)
+//passage du auth à chaque requête
+
+//passage de multer à post
+router.post("/",auth, multer, stuffCtrl.createThing)// il faut modifier le controller pour multer
   
-router.get("/", stuffCtrl.getThings);
+router.get("/",auth, stuffCtrl.getThings);
 
-router.get("/:id", stuffCtrl.getThing)
+router.get("/:id",auth, stuffCtrl.getThing)
 
-router.put("/:id", stuffCtrl.modifyThing);
+router.put("/:id",auth, multer, stuffCtrl.modifyThing);
 
-router.delete("/api/stuff/:id", stuffCtrl.deleteThing);
+router.delete("/:id",auth, stuffCtrl.deleteThing);
 
 module.exports = router;
